@@ -38,6 +38,7 @@ void myPop(int* &arr, int &N, int elemToPop){
     return;
 }
 
+int uses = 0;
 void myPop(Entity* &arr, int &N, int elemToPop){
     if (elemToPop >= N || elemToPop < 0){
         return;
@@ -50,11 +51,13 @@ void myPop(Entity* &arr, int &N, int elemToPop){
     for(int i = 0; i < N; i++){
         if(i != elemToPop){
             arr[temp] = oldArr[i];
-            temp++;
+            temp+=1;
         }
     }
+
     delete[] oldArr;
     N--;
+    
 }
 
 void myInsert(int* &arr, int &N, int elemToInsert, int index){

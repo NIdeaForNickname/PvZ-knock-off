@@ -38,6 +38,7 @@ void endOfGame(bool won);
 int readWaves(int** &waveList);
 int randomEnemy(int* arr, int size);
 void drawAllEnteties(Entity* ent1, int size, int RELATIVE_X, int RELATIVE_Y);
+void clearBoardDisplay(string** &boardDisplay, int rows);
 
 using namespace std;
 int main()
@@ -118,7 +119,7 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
 {
     srand(time(0));
 
-    int money = 100;
+    int money = 10000;
     makeBorder(true, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
     drawLine(2, SCREEN_HEIGHT, 18, 0);
 
@@ -137,7 +138,6 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
 
     const int PLAYFIELD_WIDTH = 41;
     const int PLAYFIELD_HEIGHT = 11;
-    const int PLAYFIELD_HEIGHT2 = PLAYFIELD_HEIGHT / 2;
 
 
     // список Существ
@@ -313,10 +313,10 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
                 // обновить сколько осталось до следующего хода
                 ent.turnMeter += ent.speed;
                 if (ent.subType == LANDMINE && ent.abilityUsed == true && ent.health < 100){ // проверка мины
-                    killEmAll(board, boardSize, ent.x+1, ent.y, ZOMBIE);
                     updateZoneSection(3, 1, RELATIVE_X + ent.x - 1, RELATIVE_Y + (ent.y * 2) + 1, ent.x - 1, (ent.y * 2) + 1, boardDisplay, WHITE);
                     myPop(board, boardSize, i);
                     i--;
+                    killEmAll(board, boardSize, ent.x+1, ent.y, ZOMBIE);
                     break;
                 } else if (ent.turnMeter >= 10){
                     switch (ent.subType){
@@ -382,7 +382,7 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
 
             // обновить прогресс по волнам
             makeBorder(true, 15, 3, 45, 16, DARKGREEN);
-            showElement(LINE2_I, YELLOW, 58-(state*2), 17);
+            showElement(LINE2_I, YELLOW, 58-(counter*2), 17);
             
             // если волны закончились "ю вин" и на тайтл скрин
             if (wSSize <= counter){
@@ -414,14 +414,20 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
     makeBorder(true, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
     endOfGame(won);
 
-    // очистка динам памяти от grid'а
-    for (int i = 0; i < PLAYFIELD_HEIGHT; i++)  // Deallocating strings
-    {
-        delete[] boardDisplay[i];
-    }
-    delete[] boardDisplay;  // Deallocating array of pointers
+    //clearBoardDisplay(boardDisplay, PLAYFIELD_HEIGHT);
+
     delete[] board; // очитка динам памяти от сущностей
     return;
+}
+
+void clearBoardDisplay(string** &boardDisplay, int rows) {
+    if (boardDisplay != nullptr) {
+        for (int i = 0; i < rows; i++) {
+            delete[] boardDisplay[i]; // звільняємо кожен рядок
+        }
+        delete[] boardDisplay; // звільняємо сам масив покажчикiв
+        boardDisplay = nullptr; // обнуляємо вказівник
+    }
 }
 
 void endOfGame(bool won){// отрисовка проиграша/победы соответствено
@@ -577,7 +583,7 @@ void killEmAll(Entity* &vect, int &size, int x, int y, entityType typr) // ми�
         {
             myPop(vect, size, i);
             i--;
-            size--;
+            //size--;
         }
     }
 }
