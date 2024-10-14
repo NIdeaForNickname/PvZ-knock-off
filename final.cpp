@@ -119,7 +119,7 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
 {
     srand(time(0));
 
-    int money = 10000;
+    int money = 150;
     makeBorder(true, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0);
     drawLine(2, SCREEN_HEIGHT, 18, 0);
 
@@ -407,7 +407,7 @@ void game(const int &SCREEN_HEIGHT, const int &SCREEN_WIDTH)
         }
 
         // задержка между "ходами"
-        usleep(50000); // microseconds (1 S/1,000,000 mcS)
+        usleep(100000); // microseconds (1 S/1,000,000 mcS)
     }
 
     // отрисовка победы/проиграша
